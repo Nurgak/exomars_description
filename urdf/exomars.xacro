@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<robot name="exomars" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- Constants for robot parameters -->
+  <xacro:property name="base_mass" value="10.0" />
+  <xacro:property name="mass" value="1.0" />
+  <!-- Damping and friction for all joints -->
+  <xacro:property name="damping" value="0.1" />
+  <xacro:property name="friction" value="0.1" />
+
+  <!-- Import all Gazebo-customization elements, including Gazebo colors and plugins -->
+  <xacro:include filename="$(find exomars_description)/urdf/exomars.gazebo" />
+  <!-- Import Rviz colors -->
+  <xacro:include filename="$(find exomars_description)/urdf/materials.xacro" />
+  
+  <!-- Main body -->
+  <link name="base_link">
+    <collision>
+      <origin xyz="0 0 0.3" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.7 0.9 0.57"/>
+      </geometry>
+    </collision>
+    <inertial>
+       <mass value="${base_mass}"/>
+        <inertia
+            ixx="${base_mass / 12.0 * (0.9 * 0.9 + 0.57 * 0.57)}"
+            iyy="${base_mass / 12.0 * (0.7 * 0.7 + 0.57 * 0.57)}"
+            izz="${base_mass / 12.0 * (0.7 *0.7 + 0.9 * 0.9)}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0.3" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.7 0.9 0.57"/>
+      </geometry>
+      <material name="gold"/>
+    </visual>
+  </link>
+  
+  <!-- Import subsystem xacro files -->
+  <xacro:include filename="$(find exomars_description)/urdf/exomars_locomotion.xacro" />
+  <xacro:include filename="$(find exomars_description)/urdf/exomars_power.xacro" />
+  <xacro:include filename="$(find exomars_description)/urdf/exomars_sensor.xacro" />
+  <xacro:include filename="$(find exomars_description)/urdf/exomars_drill.xacro" />
+</robot>

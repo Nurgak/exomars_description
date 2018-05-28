@@ -1,0 +1,250 @@
+<?xml version="1.0"?>
+<robot>
+  <joint name="joint_panel_top" type="fixed">
+    <parent link="base_link"/>
+    <child link="panel_top"/>
+    <origin xyz="-0.1 0 0.6" rpy="0 0 0"/>
+  </joint>
+  
+  <link name="panel_top">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="1 1.2 0.02"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (1.2 * 1.2 + 0.02 * 0.02)}"
+            iyy="${mass / 12.0 * (1 * 1 + 0.02 * 0.02)}"
+            izz="${mass / 12.0 * (1.2 * 1.2 + 1 * 1)}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="1 1.2 0.02"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+  </link>
+  
+  <joint name="joint_panel_front" type="fixed">
+    <parent link="base_link"/>
+    <child link="panel_front"/>
+    <origin xyz="0.55 -0.62 0.6" rpy="0 0 0"/>
+  </joint>
+  
+  <link name="panel_front">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.3 0.3 0.02"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (1.2 * 1.2 + 0.02 * 0.02)}"
+            iyy="${mass / 12.0 * (1 * 1 + 0.02 * 0.02)}"
+            izz="${mass / 12.0 * (1.2 * 1.2 + 1 * 1)}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.3 0.3 0.02"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+  </link>
+  
+  <joint name="joint_panel_center_right" type="revolute">
+    <parent link="panel_top"/>
+    <child link="panel_center_right"/>
+    <limit effort="1000.0" lower="0" upper="${pi}" velocity="0.5"/>
+    <origin xyz="0 -0.66 0.015" rpy="0 0 0"/>
+    <axis xyz="-1 0 0"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  
+  <link name="panel_center_right">
+    <collision>
+      <origin xyz="0 -0.32 -0.015" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.9 0.52 0.02"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (0.52 * 0.52 + 0.02 * 0.02)}"
+            iyy="${mass / 12.0 * (0.9 * 0.9 + 0.02 * 0.02)}"
+            izz="${mass / 12.0 * (0.9 * 0.9 + 0.52 * 0.52)}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 -0.32 -0.015" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.9 0.52 0.02"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+  </link>
+  
+  <joint name="joint_panel_back_right" type="revolute">
+    <parent link="panel_center_right"/>
+    <child link="panel_back_right"/>
+    <limit effort="1000.0" lower="0" upper="${pi}" velocity="0.5"/>
+    <origin xyz="-0.5 -0.32 -0.03" rpy="0 0 0"/>
+    <axis xyz="0 -1 0"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  
+  <link name="panel_back_right">
+    <collision>
+      <origin xyz="-0.5 0 0.015" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.9 0.52 0.02"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (0.52 * 0.52 + 0.02 * 0.02)}"
+            iyy="${mass / 12.0 * (0.9 * 0.9 + 0.02 * 0.02)}"
+            izz="${mass / 12.0 * (0.9 * 0.9 + 0.52 * 0.52)}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.5 0 0.015" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.9 0.52 0.02"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+  </link>
+  
+  <joint name="joint_panel_center_left" type="revolute">
+    <parent link="panel_top"/>
+    <child link="panel_center_left"/>
+    <limit effort="1000.0" lower="0" upper="${pi}" velocity="0.5"/>
+    <origin xyz="0 0.66 0.015" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  
+  <link name="panel_center_left">
+    <collision>
+      <origin xyz="0 0.32 -0.015" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.9 0.52 0.02"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (0.52 * 0.52 + 0.02 * 0.02)}"
+            iyy="${mass / 12.0 * (0.9 * 0.9 + 0.02 * 0.02)}"
+            izz="${mass / 12.0 * (0.9 * 0.9 + 0.52 * 0.52)}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0.32 -0.015" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.9 0.52 0.02"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+  </link>
+  
+  <joint name="joint_panel_back_left" type="revolute">
+    <parent link="panel_center_left"/>
+    <child link="panel_back_left"/>
+    <limit effort="1000.0" lower="0" upper="${pi}" velocity="0.5"/>
+    <origin xyz="-0.5 0.32 -0.03" rpy="0 0 0"/>
+    <axis xyz="0 -1 0"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  
+  <link name="panel_back_left">
+    <collision>
+      <origin xyz="-0.5 0 0.015" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.9 0.52 0.02"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (0.52 * 0.52 + 0.02 * 0.02)}"
+            iyy="${mass / 12.0 * (0.9 * 0.9 + 0.02 * 0.02)}"
+            izz="${mass / 12.0 * (0.9 * 0.9 + 0.52 * 0.52)}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.5 0 0.015" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.9 0.52 0.02"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+  </link>
+
+  <transmission name="transmission_panel_center_right">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_panel_center_right">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_panel_center_right">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  
+  <transmission name="transmission_panel_center_left">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_panel_center_left">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_panel_center_left">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  
+  <transmission name="transmission_panel_back_right">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_panel_back_right">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_panel_back_right">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  
+  <transmission name="transmission_panel_back_left">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_panel_back_left">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_panel_back_left">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+</robot>

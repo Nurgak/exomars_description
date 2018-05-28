@@ -1,0 +1,273 @@
+<?xml version="1.0"?>
+<robot>
+  <gazebo>
+    <!-- Parser for transmission tags -->
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>exomars</robotNamespace>
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+    </plugin>
+
+    <!-- Publish "ground truth odometry" from map to base_link, perfect odometry -->
+    <plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
+      <robotNamespace>exomars</robotNamespace>
+      <alwaysOn>true</alwaysOn>
+      <updateRate>20.0</updateRate>
+      <bodyName>base_link</bodyName>
+      <topicName>odom</topicName>
+      <gaussianNoise>0.0</gaussianNoise>
+      <frameName>map</frameName>
+      <xyzOffsets>0 0 0</xyzOffsets>
+      <rpyOffsets>0 0 0</rpyOffsets>
+    </plugin>
+    
+    <!-- Publish 6-axis IMU data relative to the base_link frame -->
+    <plugin name="imu" filename="libhector_gazebo_ros_imu.so">
+        <robotNamespace>exomars</robotNamespace>
+        <alwaysOn>true</alwaysOn>
+        <updateRate>100.0</updateRate> 
+        <bodyName>base_link</bodyName>
+        <frameID>imu</frameID>
+        <topicName>imu</topicName>
+        <xyzOffset>0.0 0.0 0.0</xyzOffset>
+        <rpyOffset>0.0 0.0 0.0</rpyOffset>
+        <gaussianNoise>0</gaussianNoise>
+        <accelDrift>0.0 0.0 0.0</accelDrift>
+        <accelGaussianNoise>0.0 0.0 0.0</accelGaussianNoise>
+        <rateDrift>0.0 0.0 0.0</rateDrift>
+        <rateGaussianNoise>0.0 0.0 0.0</rateGaussianNoise>
+        <headingDrift>0.0</headingDrift>
+        <headingGaussianNoise>0.0</headingGaussianNoise>
+    </plugin>
+
+    <!-- Publish ground truth GPS data relative to the base_link frame -->
+    <plugin name="gps" filename="libhector_gazebo_ros_gps.so">
+        <robotNamespace>exomars</robotNamespace>
+      <alwaysOn>true</alwaysOn>
+      <updateRate>4.0</updateRate>
+      <bodyName>base_link</bodyName>
+      <topicName>gps</topicName>
+      <velocityTopicName>gps_velocity</velocityTopicName>
+      <drift>0.0 0.0 0.0</drift>
+      <gaussianNoise>0.0 0.0 0.0</gaussianNoise>
+      <velocityDrift>0 0 0</velocityDrift>
+      <velocityGaussianNoise>0.0 0.0 0.0</velocityGaussianNoise>
+    </plugin>
+  </gazebo>
+  
+  <!-- Define the Gazebo colors for all bodies -->
+  <gazebo reference="base_link">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Gold</material>
+  </gazebo>
+  
+  <gazebo reference="bogie_arm_back">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Grey</material>
+  </gazebo>
+  
+  <gazebo reference="wrist_back_left">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Gold</material>
+  </gazebo>
+  
+  <gazebo reference="finger_back_left">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Gold</material>
+  </gazebo>
+  
+  <gazebo reference="wheel_back_left">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Black</material>
+  </gazebo>
+  
+  <gazebo reference="wrist_back_right">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Gold</material>
+  </gazebo>
+  
+  <gazebo reference="finger_back_right">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Gold</material>
+  </gazebo>
+  
+  <gazebo reference="wheel_back_right">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Black</material>
+  </gazebo>
+  
+  <gazebo reference="bogie_arm_left">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Grey</material>
+  </gazebo>
+  
+  <gazebo reference="wrist_center_left">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Gold</material>
+  </gazebo>
+  
+  <gazebo reference="finger_center_left">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Gold</material>
+  </gazebo>
+  
+  <gazebo reference="wheel_center_left">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Black</material>
+  </gazebo>
+  
+  <gazebo reference="wrist_front_left">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Gold</material>
+  </gazebo>
+  
+  <gazebo reference="finger_front_left">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Gold</material>
+  </gazebo>
+  
+  <gazebo reference="wheel_front_left">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Black</material>
+  </gazebo>
+  
+  <gazebo reference="bogie_arm_right">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Grey</material>
+  </gazebo>
+  
+  <gazebo reference="wrist_center_right">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Gold</material>
+  </gazebo>
+  
+  <gazebo reference="finger_center_right">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Gold</material>
+  </gazebo>
+  
+  <gazebo reference="wheel_center_right">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Black</material>
+  </gazebo>
+  
+  <gazebo reference="wrist_front_right">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Gold</material>
+  </gazebo>
+  
+  <gazebo reference="finger_front_right">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Gold</material>
+  </gazebo>
+  
+  <gazebo reference="wheel_front_right">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Black</material>
+  </gazebo>
+  
+  <gazebo reference="panel_top">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Blue</material>
+  </gazebo>
+  
+  <gazebo reference="panel_front">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Blue</material>
+  </gazebo>
+  
+  <gazebo reference="panel_center_left">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Blue</material>
+  </gazebo>
+  
+  <gazebo reference="panel_center_right">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Blue</material>
+  </gazebo>
+  
+  <gazebo reference="panel_back_left">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Blue</material>
+  </gazebo>
+  
+  <gazebo reference="panel_back_right">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Blue</material>
+  </gazebo>
+  
+  <gazebo reference="pamcam_mast">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Grey</material>
+  </gazebo>
+  
+  <gazebo reference="mast_tilt">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Grey</material>
+  </gazebo>
+  
+  <gazebo reference="pancam_support">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Gold</material>
+  </gazebo>
+  
+  <gazebo reference="pancam_frame_left">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Black</material>
+  </gazebo>
+  
+  <gazebo reference="pancam_frame_right">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Black</material>
+  </gazebo>
+  
+  <gazebo reference="pancam_frame_hrc">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Black</material>
+  </gazebo>
+  
+  <gazebo reference="drill_support">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Grey</material>
+  </gazebo>
+  
+  <gazebo reference="drill_housing">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Grey</material>
+  </gazebo>
+</robot>

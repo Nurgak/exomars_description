@@ -1,0 +1,957 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:property name="limit_drive_effort" value="1000" />
+  <xacro:property name="limit_drive_velocity" value="1" />
+  <xacro:property name="limit_bogie_effort" value="1000" />
+  <xacro:property name="limit_bogie_lower" value="${-pi / 2}" />
+  <xacro:property name="limit_bogie_upper" value="${pi / 2}" />
+  <xacro:property name="limit_bogie_velocity" value="1" />
+  <xacro:property name="limit_ww_effort" value="10000" />
+  <xacro:property name="limit_ww_lower" value="0" />
+  <xacro:property name="limit_ww_upper" value="${pi}" />
+  <xacro:property name="limit_ww_velocity" value="1" />
+  <xacro:property name="limit_steer_effort" value="1000" />
+  <xacro:property name="limit_steer_lower" value="${-pi / 2}" />
+  <xacro:property name="limit_steer_upper" value="${pi / 2}" />
+  <xacro:property name="limit_steer_velocity" value="1" />
+  
+  <joint name="joint_bogie_back" type="revolute">
+    <parent link="base_link"/>
+    <child link="bogie_arm_back"/>
+    <limit effort="${limit_bogie_effort}" lower="${limit_bogie_lower}" upper="${limit_bogie_upper}" velocity="${limit_bogie_velocity}"/>
+    <origin xyz="-0.4 0 0.1" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+
+  <link name="bogie_arm_back">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.05 1 0.1"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (1 * 1 + 0.1 * 0.1)}"
+            iyy="${mass / 12.0 * (0.05 * 0.05 + 0.1 * 0.1)}"
+            izz="${mass / 12.0 * (0.05 * 0.05 + 1 * 1)}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.05 1 0.1"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+  </link>
+  
+  <joint name="joint_ww_back_left" type="revolute">
+    <parent link="bogie_arm_back"/>
+    <child link="wrist_back_left"/>
+    <limit effort="${limit_ww_effort}" lower="${limit_ww_lower}" upper="${limit_ww_upper}" velocity="${limit_ww_velocity}"/>
+    <origin xyz="-0.15 0.48 -0.04" rpy="0 0 0"/>
+    <axis xyz="0 -1 0"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  
+  <link name="wrist_back_left">
+    <collision>
+      <origin xyz="0 0.1 -0.025" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.15 0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (0.15 * 0.15 + 0.05 * 0.05)}"
+            iyy="${mass / 12.0 * (0.1 * 0.1 + 0.05 * 0.05)}"
+            izz="${mass / 12.0 * (0.1 * 0.1 + 0.15 * 0.15)}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0.1 -0.025" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.15 0.05"/>
+      </geometry>
+      <material name="gold"/>
+    </visual>
+  </link>
+
+  <joint name="joint_steer_back_left" type="revolute">
+    <parent link="wrist_back_left"/>
+    <child link="finger_back_left"/>
+    <limit effort="${limit_steer_effort}" lower="${limit_steer_lower}" upper="${limit_steer_upper}" velocity="${limit_steer_velocity}"/>
+    <origin xyz="-0.05 0.13 -0.025" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  
+  <link name="finger_back_left">
+    <collision>
+      <origin xyz="0 0.08 -0.1" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.03 0.15"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (0.03 * 0.03 + 0.15 * 0.15)}"
+            iyy="${mass / 12.0 * (0.1 * 0.1 + 0.15 * 0.15)}"
+            izz="${mass / 12.0 * (0.1 * 0.1 + 0.03 * 0.03)}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0.08 -0.1" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.03 0.15"/>
+      </geometry>
+      <material name="gold"/>
+    </visual>
+  </link>
+
+  <joint name="joint_drive_back_left" type="continuous">
+    <parent link="finger_back_left"/>
+    <child link="wheel_back_left"/>
+    <limit effort="${limit_drive_effort}" velocity="${limit_drive_velocity}"/>
+    <origin xyz="0 0 -0.18" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  <link name="wheel_back_left">
+    <collision>
+      <origin xyz="0 0 0" rpy="1.57 0 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.125"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (3 * 0.125 * 0.125 + 0.1 * 0.1)}"
+            iyy="${mass / 12.0 * (3 * 0.125 * 0.125 + 0.1 * 0.1)}"
+            izz="${mass / 2.0 * 0.125 * 0.125}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.125"/>
+      </geometry>
+      <material name="wheel"/>
+    </visual>
+  </link>
+  
+  <joint name="joint_ww_back_right" type="revolute">
+    <parent link="bogie_arm_back"/>
+    <child link="wrist_back_right"/>
+    <limit effort="${limit_ww_effort}" lower="${limit_ww_lower}" upper="${limit_ww_upper}" velocity="${limit_ww_velocity}"/>
+    <origin xyz="-0.15 -0.48 -0.04" rpy="0 0 0"/>
+    <axis xyz="0 -1 0"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  
+  <link name="wrist_back_right">
+    <collision>
+      <origin xyz="0 -0.1 -0.025" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.15 0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (3 * 0.125 * 0.125 + 0.1 * 0.1)}"
+            iyy="${mass / 12.0 * (3 * 0.125 * 0.125 + 0.1 * 0.1)}"
+            izz="${mass / 2.0 * 0.125 * 0.125}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 -0.1 -0.025" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.15 0.05"/>
+      </geometry>
+      <material name="gold"/>
+    </visual>
+  </link>
+
+  <joint name="joint_steer_back_right" type="revolute">
+    <parent link="wrist_back_right"/>
+    <child link="finger_back_right"/>
+    <limit effort="${limit_steer_effort}" lower="${limit_steer_lower}" upper="${limit_steer_upper}" velocity="${limit_steer_velocity}"/>
+    <origin xyz="-0.05 -0.13 -0.025" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  
+  <link name="finger_back_right">
+    <collision>
+      <origin xyz="0 -0.08 -0.1" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.03 0.15"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (0.03 * 0.03 + 0.15 * 0.15)}"
+            iyy="${mass / 12.0 * (0.1 * 0.1 + 0.15 * 0.15)}"
+            izz="${mass / 12.0 * (0.1 * 0.1 + 0.03 * 0.03)}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 -0.08 -0.1" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.03 0.15"/>
+      </geometry>
+      <material name="gold"/>
+    </visual>
+  </link>
+
+  <joint name="joint_drive_back_right" type="continuous">
+    <parent link="finger_back_right"/>
+    <child link="wheel_back_right"/>
+    <limit effort="${limit_drive_effort}" velocity="${limit_drive_velocity}"/>
+    <origin xyz="0 0 -0.18" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  <link name="wheel_back_right">
+    <collision>
+      <origin xyz="0 0 0" rpy="1.57 0 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.125"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (3 * 0.125 * 0.125 + 0.1 * 0.1)}"
+            iyy="${mass / 12.0 * (3 * 0.125 * 0.125 + 0.1 * 0.1)}"
+            izz="${mass / 2.0 * 0.125 * 0.125}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.125"/>
+      </geometry>
+      <material name="wheel"/>
+    </visual>
+  </link>
+  
+  <joint name="joint_bogie_left" type="revolute">
+    <parent link="base_link"/>
+    <child link="bogie_arm_left"/>
+    <limit effort="${limit_bogie_effort}" lower="${limit_bogie_lower}" upper="${limit_bogie_upper}" velocity="${limit_bogie_velocity}"/>
+    <origin xyz="0.4 0.48 0.06" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  
+  <link name="bogie_arm_left">
+    <collision>
+      <origin xyz="0.05 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.6 0.05 0.1"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (0.05 * 0.05 + 0.1 * 0.1)}"
+            iyy="${mass / 12.0 * (0.6 * 0.6 + 0.1 * 0.1)}"
+            izz="${mass / 12.0 * (0.05 * 0.05 + 0.6 * 0.6)}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.05 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.6 0.05 0.1"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+  </link>
+  
+  <joint name="joint_ww_center_left" type="revolute">
+    <parent link="bogie_arm_left"/>
+    <child link="wrist_center_left"/>
+    <limit effort="${limit_ww_effort}" lower="${limit_ww_lower}" upper="${limit_ww_upper}" velocity="${limit_ww_velocity}"/>
+    <origin xyz="-0.2 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  
+  <link name="wrist_center_left">
+    <collision>
+      <origin xyz="-0.1 0.1 -0.025" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.15 0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (0.15 * 0.15 + 0.05 * 0.05)}"
+            iyy="${mass / 12.0 * (0.1 * 0.1 + 0.05 * 0.05)}"
+            izz="${mass / 12.0 * (0.1 * 0.1 + 0.15 * 0.15)}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.1 0.1 -0.025" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.15 0.05"/>
+      </geometry>
+      <material name="gold"/>
+    </visual>
+  </link>
+
+  <joint name="joint_steer_center_left" type="revolute">
+    <parent link="wrist_center_left"/>
+    <child link="finger_center_left"/>
+    <limit effort="${limit_steer_effort}" lower="${limit_steer_lower}" upper="${limit_steer_upper}" velocity="${limit_steer_velocity}"/>
+    <origin xyz="-0.1 0.13 -0.025" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  
+  <link name="finger_center_left">
+    <collision>
+      <origin xyz="0 0.08 -0.1" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.03 0.15"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (0.03 * 0.03 + 0.15 * 0.15)}"
+            iyy="${mass / 12.0 * (0.1 * 0.1 + 0.15 * 0.15)}"
+            izz="${mass / 12.0 * (0.1 * 0.1 + 0.03 * 0.03)}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0.08 -0.1" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.03 0.15"/>
+      </geometry>
+      <material name="gold"/>
+    </visual>
+  </link>
+
+  <joint name="joint_drive_center_left" type="continuous">
+    <parent link="finger_center_left"/>
+    <child link="wheel_center_left"/>
+    <limit effort="${limit_drive_effort}" velocity="${limit_drive_velocity}"/>
+    <origin xyz="0 0 -0.18" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+
+  <link name="wheel_center_left">
+    <collision>
+      <origin xyz="0 0 0" rpy="1.57 0 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.125"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (3 * 0.125 * 0.125 + 0.1 * 0.1)}"
+            iyy="${mass / 12.0 * (3 * 0.125 * 0.125 + 0.1 * 0.1)}"
+            izz="${mass / 2.0 * 0.125 * 0.125}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.125"/>
+      </geometry>
+      <material name="wheel"/>
+    </visual>
+  </link>
+  
+  <joint name="joint_ww_front_left" type="revolute">
+    <parent link="bogie_arm_left"/>
+    <child link="wrist_front_left"/>
+    <limit effort="${limit_ww_effort}" lower="${limit_ww_lower}" upper="${limit_ww_upper}" velocity="${limit_ww_velocity}"/>
+    <origin xyz="0.3 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  
+  <link name="wrist_front_left">
+    <collision>
+      <origin xyz="0 0.1 -0.025" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.15 0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (0.15 * 0.15 + 0.05 * 0.05)}"
+            iyy="${mass / 12.0 * (0.1 * 0.1 + 0.05 * 0.05)}"
+            izz="${mass / 12.0 * (0.1 * 0.1 + 0.15 * 0.15)}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0.1 -0.025" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.15 0.05"/>
+      </geometry>
+      <material name="gold"/>
+    </visual>
+  </link>
+
+  <joint name="joint_steer_front_left" type="revolute">
+    <parent link="wrist_front_left"/>
+    <child link="finger_front_left"/>
+    <limit effort="${limit_steer_effort}" lower="${limit_steer_lower}" upper="${limit_steer_upper}" velocity="${limit_steer_velocity}"/>
+    <origin xyz="0.05 0.13 -0.025" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  
+  <link name="finger_front_left">
+    <collision>
+      <origin xyz="0 0.08 -0.1" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.03 0.15"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (0.03 * 0.03 + 0.15 * 0.15)}"
+            iyy="${mass / 12.0 * (0.1 * 0.1 + 0.15 * 0.15)}"
+            izz="${mass / 12.0 * (0.1 * 0.1 + 0.03 * 0.03)}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0.08 -0.1" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.03 0.15"/>
+      </geometry>
+      <material name="gold"/>
+    </visual>
+  </link>
+
+  <joint name="joint_drive_front_left" type="continuous">
+    <parent link="finger_front_left"/>
+    <child link="wheel_front_left"/>
+    <limit effort="${limit_drive_effort}" velocity="${limit_drive_velocity}"/>
+    <origin xyz="0 0 -0.18" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  <link name="wheel_front_left">
+    <collision>
+      <origin xyz="0 0 0" rpy="1.57 0 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.125"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (3 * 0.125 * 0.125 + 0.1 * 0.1)}"
+            iyy="${mass / 12.0 * (3 * 0.125 * 0.125 + 0.1 * 0.1)}"
+            izz="${mass / 2.0 * 0.125 * 0.125}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.125"/>
+      </geometry>
+      <material name="wheel"/>
+    </visual>
+  </link>
+  
+  <joint name="joint_bogie_right" type="revolute">
+    <parent link="base_link"/>
+    <child link="bogie_arm_right"/>
+    <limit effort="1000.0" lower="${pi*(-1)}" upper="${pi}" velocity="1"/>
+    <origin xyz="0.4 -0.48 0.06" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  
+  <link name="bogie_arm_right">
+    <collision>
+      <origin xyz="0.05 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.6 0.05 0.1"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (0.05 * 0.05 + 0.1 * 0.1)}"
+            iyy="${mass / 12.0 * (0.6 * 0.6 + 0.1 * 0.1)}"
+            izz="${mass / 12.0 * (0.05 * 0.05 + 0.6 * 0.6)}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.05 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.6 0.05 0.1"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+  </link>
+
+  <joint name="joint_ww_center_right" type="revolute">
+    <parent link="bogie_arm_right"/>
+    <child link="wrist_center_right"/>
+    <limit effort="${limit_ww_effort}" lower="${limit_ww_lower}" upper="${limit_ww_upper}" velocity="${limit_ww_velocity}"/>
+    <origin xyz="-0.2 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  
+  <link name="wrist_center_right">
+    <collision>
+      <origin xyz="-0.1 -0.1 -0.025" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.15 0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (0.15 * 0.15 + 0.05 * 0.05)}"
+            iyy="${mass / 12.0 * (0.1 * 0.1 + 0.05 * 0.05)}"
+            izz="${mass / 12.0 * (0.1 * 0.1 + 0.15 * 0.15)}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.1 -0.1 -0.025" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.15 0.05"/>
+      </geometry>
+      <material name="gold"/>
+    </visual>
+  </link>
+
+  <joint name="joint_steer_center_right" type="revolute">
+    <parent link="wrist_center_right"/>
+    <child link="finger_center_right"/>
+    <limit effort="${limit_steer_effort}" lower="${limit_steer_lower}" upper="${limit_steer_upper}" velocity="${limit_steer_velocity}"/>
+    <origin xyz="-0.1 -0.13 -0.025" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  
+  <link name="finger_center_right">
+    <collision>
+      <origin xyz="0 -0.08 -0.1" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.03 0.15"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (0.03 * 0.03 + 0.15 * 0.15)}"
+            iyy="${mass / 12.0 * (0.1 * 0.1 + 0.15 * 0.15)}"
+            izz="${mass / 12.0 * (0.1 * 0.1 + 0.03 * 0.03)}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 -0.08 -0.1" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.03 0.15"/>
+      </geometry>
+      <material name="gold"/>
+    </visual>
+  </link>
+
+  <joint name="joint_drive_center_right" type="continuous">
+    <parent link="finger_center_right"/>
+    <child link="wheel_center_right"/>
+    <limit effort="${limit_drive_effort}" velocity="${limit_drive_velocity}"/>
+    <origin xyz="0 0 -0.18" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  <link name="wheel_center_right">
+    <collision>
+      <origin xyz="0 0 0" rpy="1.57 0 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.125"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (3 * 0.125 * 0.125 + 0.1 * 0.1)}"
+            iyy="${mass / 12.0 * (3 * 0.125 * 0.125 + 0.1 * 0.1)}"
+            izz="${mass / 2.0 * 0.125 * 0.125}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.125"/>
+      </geometry>
+      <material name="wheel"/>
+    </visual>
+  </link>
+  
+  <joint name="joint_ww_front_right" type="revolute">
+    <parent link="bogie_arm_right"/>
+    <child link="wrist_front_right"/>
+    <limit effort="${limit_ww_effort}" lower="${limit_ww_lower}" upper="${limit_ww_upper}" velocity="${limit_ww_velocity}"/>
+    <origin xyz="0.3 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  
+  <link name="wrist_front_right">
+    <collision>
+      <origin xyz="0 -0.1 -0.025" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.15 0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (0.15 * 0.15 + 0.05 * 0.05)}"
+            iyy="${mass / 12.0 * (0.1 * 0.1 + 0.05 * 0.05)}"
+            izz="${mass / 12.0 * (0.1 * 0.1 + 0.15 * 0.15)}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 -0.1 -0.025" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.15 0.05"/>
+      </geometry>
+      <material name="gold"/>
+    </visual>
+  </link>
+
+  <joint name="joint_steer_front_right" type="revolute">
+    <parent link="wrist_front_right"/>
+    <child link="finger_front_right"/>
+    <limit effort="${limit_steer_effort}" lower="${limit_steer_lower}" upper="${limit_steer_upper}" velocity="${limit_steer_velocity}"/>
+    <origin xyz="0.05 -0.13 -0.025" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  
+  <link name="finger_front_right">
+    <collision>
+      <origin xyz="0 -0.08 -0.1" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.03 0.15"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (0.03 * 0.03 + 0.15 * 0.15)}"
+            iyy="${mass / 12.0 * (0.1 * 0.1 + 0.15 * 0.15)}"
+            izz="${mass / 12.0 * (0.1 * 0.1 + 0.03 * 0.03)}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 -0.08 -0.1" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.03 0.15"/>
+      </geometry>
+      <material name="gold"/>
+    </visual>
+  </link>
+
+  <joint name="joint_drive_front_right" type="continuous">
+    <parent link="finger_front_right"/>
+    <child link="wheel_front_right"/>
+    <limit effort="${limit_drive_effort}" velocity="${limit_drive_velocity}"/>
+    <origin xyz="0 0 -0.18" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  
+  <link name="wheel_front_right">
+    <collision>
+      <origin xyz="0 0 0" rpy="1.57 0 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.125"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (3 * 0.125 * 0.125 + 0.1 * 0.1)}"
+            iyy="${mass / 12.0 * (3 * 0.125 * 0.125 + 0.1 * 0.1)}"
+            izz="${mass / 2.0 * 0.125 * 0.125}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.125"/>
+      </geometry>
+      <material name="wheel"/>
+    </visual>
+  </link>
+  <transmission name="transmission_bogie_right">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_bogie_right">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_bogie_right">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  
+  <transmission name="transmission_bogie_left">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_bogie_left">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_bogie_left">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  
+  <transmission name="transmission_bogie_back">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_bogie_back">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_bogie_back">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  
+  <transmission name="transmission_steer_back_left">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_steer_back_left">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_steer_back_left">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="transmission_steer_back_right">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_steer_back_right">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_steer_back_right">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  
+  <transmission name="transmission_steer_center_left">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_steer_center_left">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_steer_center_left">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="transmission_steer_center_right">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_steer_center_right">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_steer_center_right">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  
+  <transmission name="transmission_steer_front_left">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_steer_front_left">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_steer_front_left">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="transmission_steer_front_right">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_steer_front_right">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_steer_front_right">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  
+  <transmission name="transmission_drive_back_left">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_drive_back_left">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_drive_back_left">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="transmission_drive_back_right">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_drive_back_right">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_drive_back_right">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  
+  <transmission name="transmission_drive_center_left">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_drive_center_left">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_drive_center_left">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="transmission_drive_center_right">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_drive_center_right">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_drive_center_right">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  
+  <transmission name="transmission_drive_front_left">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_drive_front_left">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_drive_front_left">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="transmission_drive_front_right">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_drive_front_right">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_drive_front_right">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  
+  <transmission name="transmission_ww_back_left">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_ww_back_left">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_ww_back_left">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="transmission_ww_back_right">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_ww_back_right">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_ww_back_right">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  
+  <transmission name="transmission_ww_center_left">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_ww_center_left">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_ww_center_left">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="transmission_ww_center_right">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_ww_center_right">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_ww_center_right">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  
+  <transmission name="transmission_ww_front_left">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_ww_front_left">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_ww_front_left">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="transmission_ww_front_right">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_ww_front_right">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_ww_front_right">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+</robot>

@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<robot>
+  <joint name="joint_drill_translation" type="prismatic">
+    <parent link="base_link"/>
+    <child link="drill_support"/>
+    <limit effort="10000.0" lower="0" upper="0.4" velocity="0.5"/>
+    <origin xyz="0.4 0.09 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  
+  <link name="drill_support">
+    <collision>
+      <origin xyz="0.1 0 0.08" rpy="0 ${pi / 2} 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.04"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (3 * 0.04 * 0.04 + 0.1 * 0.1)}"
+            iyy="${mass / 12.0 * (3 * 0.04 * 0.04 + 0.1 * 0.1)}"
+            izz="${mass / 2.0 * 0.04 * 0.04}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.1 0 0.08" rpy="0 ${pi / 2} 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.04"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+  </link>
+
+  <joint name="joint_drill_rotation" type="revolute">
+    <parent link="drill_support"/>
+    <child link="drill_housing"/>
+    <limit effort="10000.0" lower="0" upper="${pi / 2}" velocity="0.5"/>
+    <origin xyz="0.18 0 0" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <dynamics damping="${damping}" friction="${friction}"/>
+  </joint>
+  
+  <link name="drill_housing">
+    <collision>
+      <origin xyz="-0.048 -0.13 0.1" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.8" radius="0.09"/>
+      </geometry>
+    </collision>
+    <inertial>
+        <mass value="${mass}"/>
+        <inertia
+            ixx="${mass / 12.0 * (3 * 0.09 * 0.09 + 0.8 * 0.8)}"
+            iyy="${mass / 12.0 * (3 * 0.09 * 0.09 + 0.8 * 0.8)}"
+            izz="${mass / 2.0 * 0.09 * 0.09}"
+            ixy="0"
+            ixz="0"
+            iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.048 -0.13 0.1" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.8" radius="0.09"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+  </link>
+
+  <transmission name="transmission_drill_translation">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_drill_translation">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_drill_translation">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="transmission_drill_rotation">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_drill_rotation">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_drill_rotation">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+</robot>

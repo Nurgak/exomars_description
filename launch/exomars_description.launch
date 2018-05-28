@@ -1,0 +1,92 @@
+<?xml version="1.0" ?>
+<launch>
+    <!-- Platform specific parameters -->
+    <arg name="deployed" default="true"/>
+    
+    <!-- Launch the Gazebo simulation environment -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <!-- If launched unpaused the rover will ragdoll all over the place -->
+        <arg name="paused" value="true"/>
+    </include>
+
+    <group ns="exomars">
+        <!-- Load rover physical representation -->
+        <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find exomars_description)/urdf/exomars.xacro'" />
+
+        <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+        <!-- The joints are not actuated, a controller must run to maintain the positions -->
+        <!-- Deployed mode -->
+        <node if="$(arg deployed)" name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" args="-param robot_description -urdf
+            -x 0.0
+            -y 0.0
+            -z 0.3
+            -R 0.0
+            -P 0.0
+            -Y 0.0
+            -J joint_panel_center_left 0.0
+            -J joint_panel_center_right 0.0
+            -J joint_panel_back_left 0.0
+            -J joint_panel_back_right 0.0
+            -J joint_ww_center_left 0.0
+            -J joint_ww_center_right 0.0
+            -J joint_ww_back_left 0.0
+            -J joint_ww_back_right 0.0
+            -J joint_ww_front_left 0.0
+            -J joint_ww_front_right 0.0
+            -J joint_steer_center_left 0.0
+            -J joint_steer_center_right 0.0
+            -J joint_steer_back_left 0.0
+            -J joint_steer_back_right 0.0
+            -J joint_steer_front_left 0.0
+            -J joint_steer_front_right 0.0
+            -J joint_drive_center_left 0.0
+            -J joint_drive_center_right 0.0
+            -J joint_drive_back_left 0.0
+            -J joint_drive_back_right 0.0
+            -J joint_drive_front_left 0.0
+            -J joint_drive_front_right 0.0
+            -J joint_ptu_deploy 0.0
+            -J joint_ptu_tilt 0.0
+            -J joint_ptu_pan 0.0
+            -J joint_drill_translation 0.4
+            -J joint_drill_rotation 1.5708
+            -model exomars"/>
+
+        <!-- Stowed mode -->
+        <node unless="$(arg deployed)" name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" args="-param robot_description -urdf
+            -x 0.0
+            -y 0.0
+            -z 0.0
+            -R 0.0
+            -P 0.0
+            -Y 0.0
+            -J joint_panel_center_left 3.1416
+            -J joint_panel_center_right 3.1416
+            -J joint_panel_back_left 3.1416
+            -J joint_panel_back_right 3.1416
+            -J joint_ww_center_left 1.5708
+            -J joint_ww_center_right 1.5708
+            -J joint_ww_back_left 2.2689
+            -J joint_ww_back_right 2.2689
+            -J joint_ww_front_left 2.2689
+            -J joint_ww_front_right 2.2689
+            -J joint_steer_center_left 0.0
+            -J joint_steer_center_right 0.0
+            -J joint_steer_back_left 0.0
+            -J joint_steer_back_right 0.0
+            -J joint_steer_front_left 0.0
+            -J joint_steer_front_right 0.0
+            -J joint_drive_center_left 0.0
+            -J joint_drive_center_right 0.0
+            -J joint_drive_back_left 0.0
+            -J joint_drive_back_right 0.0
+            -J joint_drive_front_left 0.0
+            -J joint_drive_front_right 0.0
+            -J joint_ptu_deploy 1.5708
+            -J joint_ptu_tilt -1.5708
+            -J joint_ptu_pan 0.0
+            -J joint_drill_translation 0.4
+            -J joint_drill_rotation 1.5708
+            -model exomars"/>
+    </group>
+</launch>
